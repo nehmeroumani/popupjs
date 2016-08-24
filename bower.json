@@ -1,0 +1,20 @@
+{
+  "name": "popup.js",
+  "main": "popupjs.js",
+  "homepage": "https://github.com/nehmeroumani/popupjs",
+  "authors": [
+    "Nehme Roumani <nehmeroumani@gmail.com>"
+  ],
+  "description": "simple js popup",
+  "keywords": [
+    "popup",
+    "confirm"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

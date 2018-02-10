@@ -3,6 +3,7 @@ define('popupjs', ['jquery'], function ($) {
         popupContainer: null,
         popupBox: null,
         okCallback: null,
+        closeCallback: null,
         init: function (selector) {
             if (selector) {
                 this.popupContainer = $(selector);
@@ -14,6 +15,9 @@ define('popupjs', ['jquery'], function ($) {
                         self.hide(400, function () {
                             self.okCallback = null;
                             self.popupBox.html('');
+                            if (typeof self.closeCallback == 'function') {
+                                self.closeCallback(self);
+                            }
                         });
                     });
                     this.popupContainer.on('click', '.ok', function (e) {
@@ -26,18 +30,21 @@ define('popupjs', ['jquery'], function ($) {
             }
             return this;
         },
-        show: function (data, cb) {
+        show: function (data, okCb, closeCb) {
             var self = this;
             if (data && this.popupBox.length > 0) {
                 self.popupBox.html(data);
-                if (typeof cb == 'function') {
-                    self.okCallback = cb;
+                if (typeof okCb == 'function') {
+                    self.okCallback = okCb;
+                }
+                if (typeof closeCb == 'function') {
+                    self.closeCallback = closeCb;
                 }
                 self.popupContainer.fadeIn();
             }
         },
-        hide: function () {
-            this.popupContainer.fadeOut();
+        hide: function (speed, cb) {
+            this.popupContainer.fadeOut(speed, cb);
         }
     };
 });

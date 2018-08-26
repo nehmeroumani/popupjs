@@ -3,7 +3,7 @@ define('popupjs', ['jquery'], function ($) {
         popupContainer: null,
         popupBox: null,
         okCallback: null,
-        closeCallback: null,
+        beforeFunc: null,
         init: function (selector) {
             if (selector) {
                 this.popupContainer = $(selector);
@@ -15,9 +15,6 @@ define('popupjs', ['jquery'], function ($) {
                         self.hide(400, function () {
                             self.okCallback = null;
                             self.popupBox.html('');
-                            if (typeof self.closeCallback == 'function') {
-                                self.closeCallback(self);
-                            }
                         });
                     });
                     this.popupContainer.on('click', '.ok', function (e) {
@@ -30,21 +27,28 @@ define('popupjs', ['jquery'], function ($) {
             }
             return this;
         },
-        show: function (data, okCb, closeCb) {
+        before : function(f){
+            if (typeof f == 'function') {
+                this.beforeFunc = f;
+            }
+        },
+        show: function (data, cb) {
             var self = this;
-            if (data && this.popupBox.length > 0) {
+            if (data && self.popupBox.length > 0) {
                 self.popupBox.html(data);
-                if (typeof okCb == 'function') {
-                    self.okCallback = okCb;
+                if (typeof cb == 'function') {
+                    self.okCallback = cb;
                 }
-                if (typeof closeCb == 'function') {
-                    self.closeCallback = closeCb;
+                if (typeof self.beforeFunc == 'function') {
+                    self.beforeFunc();
                 }
                 self.popupContainer.fadeIn();
             }
         },
-        hide: function (speed, cb) {
-            this.popupContainer.fadeOut(speed, cb);
+        hide: function () {
+            this.okCallback = null;
+            this.beforeFunc = null;
+            this.popupContainer.fadeOut();
         }
     };
 });

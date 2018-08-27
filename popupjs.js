@@ -55,7 +55,7 @@ define('popupjs', ['jquery'], function ($) {
             this.okCallback = null;
             this.beforeFunc = null;
             this.popupContainer.fadeOut();
-            self.popupContainer.off('click');
+            this.popupContainer.off('click');
         }
     };
 });

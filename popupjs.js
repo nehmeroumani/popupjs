@@ -32,6 +32,11 @@ define('popupjs', ['jquery'], function ($) {
                 this.beforeFunc = f;
             }
         },
+        _dismiss: function (e) {
+            if ($(e.target).hasClass('popup-container')) {
+                this.hide();
+            }
+        },
         show: function (data, cb) {
             var self = this;
             if (data && self.popupBox.length > 0) {
@@ -39,11 +44,7 @@ define('popupjs', ['jquery'], function ($) {
                 if (typeof cb == 'function') {
                     self.okCallback = cb;
                 } else {
-                    self.popupContainer.on('click', function (e) {
-                        if ($(e.target).hasClass('popup-container')) {
-                            self.hide();
-                        }
-                    });
+                    self.popupContainer.on('click', self._dismiss.bind(self));
                 }
                 if (typeof self.beforeFunc == 'function') {
                     self.beforeFunc();
@@ -55,7 +56,7 @@ define('popupjs', ['jquery'], function ($) {
             this.okCallback = null;
             this.beforeFunc = null;
             this.popupContainer.fadeOut();
-            this.popupContainer.off('click');
+            this.popupContainer.off('click', this._dismiss.bind(this));
         }
     };
 });

@@ -27,7 +27,7 @@ define('popupjs', ['jquery'], function ($) {
             }
             return this;
         },
-        before : function(f){
+        before: function (f) {
             if (typeof f == 'function') {
                 this.beforeFunc = f;
             }
@@ -38,6 +38,12 @@ define('popupjs', ['jquery'], function ($) {
                 self.popupBox.html(data);
                 if (typeof cb == 'function') {
                     self.okCallback = cb;
+                } else {
+                    self.popupContainer.on('click', function (e) {
+                        if ($(e.target).hasClass('popup-container')) {
+                            self.hide();
+                        }
+                    });
                 }
                 if (typeof self.beforeFunc == 'function') {
                     self.beforeFunc();
@@ -49,6 +55,7 @@ define('popupjs', ['jquery'], function ($) {
             this.okCallback = null;
             this.beforeFunc = null;
             this.popupContainer.fadeOut();
+            self.popupContainer.off('click');
         }
     };
 });

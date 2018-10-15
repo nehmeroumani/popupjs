@@ -18,8 +18,8 @@ define('popupjs', ['jquery'], function ($) {
                         });
                     });
                     this.popupContainer.on('click', '.ok', function (e) {
-                        e.preventDefault();
                         if (typeof self.okCallback == 'function') {
+                            e.preventDefault();
                             self.okCallback(self);
                         }
                     });
@@ -42,7 +42,15 @@ define('popupjs', ['jquery'], function ($) {
             if (data && self.popupBox.length > 0) {
                 self.popupBox.html(data);
                 if (typeof cb == 'function') {
-                    self.okCallback = cb;
+                    var form = self.popupBox.find('form');
+                    if (form.length > 0) {
+                        form.on('submit', function (e) {
+                            e.preventDefault();
+                            cb();
+                        });
+                    } else {
+                        self.okCallback = cb;
+                    }
                 } else {
                     self.popupContainer.on('click', self._dismiss.bind(self));
                 }
